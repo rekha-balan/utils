@@ -1,4 +1,4 @@
-###ES: pro-fe-web1
+### ES: pro-fe-web1
 
 Cambiare IP
 
@@ -45,7 +45,7 @@ Aggiungere disco per document root apache
 	setfacl -m d:g: DevADGroupName:rw html
 	
 	
-###ES: pro-be-db1
+### ES: pro-be-db1
 
 	yum install mariadb-server
 	systemctl enable mariadb
