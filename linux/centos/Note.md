@@ -1,5 +1,9 @@
 ES: pro-fe-web1
 
+Cambiare IP
+
+	hostnamectl set-hostname pro-fe-web1
+
 
 	yum install httpd mod_ssl php php-devel php-mysql php-pear gcc
 	systemctl enable httpd
@@ -15,16 +19,24 @@ ES: pro-fe-web1
 	realm permit -g DevADGroupName
 	echo "%AdminADGroupName ALL=(ALL) ALL" > /etc/sudoers.d/AdminADGroupName
 	echo "%DevADGroupName ALL=(ALL) ALL" > /etc/sudoers.d/DevADGroupName
+	
+	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+	echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+
 
 Aggiungere disco per document root apache
 	
 	reboot
-
+	mkdir -p /data/www/html
 	ssm create --fs xfs -p data_pool -n Apache_Volume /dev/sdb /data
+	
+	blkid
+	edit fstab
+	
 	cd /etc/httpd/conf
 	mv httpd.conf httpd.conf.SAVE
 	curl -s https://raw.githubusercontent.com/algrega/utils/master/linux/centos/web/httpd.conf -o httpd.conf
-	mkdir -p /data/www/html
+	
 	systemctl restart httpd
 
 	setfacl -m g:AdminADGroupName:rwx html
