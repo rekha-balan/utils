@@ -1,4 +1,4 @@
-pro-fe-web1
+ES: pro-fe-web1
 
 
 	yum install httpd mod_ssl php php-devel php-mysql php-pear gcc
