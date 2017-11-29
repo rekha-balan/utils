@@ -1,4 +1,4 @@
-ES: pro-fe-web1
+###ES: pro-fe-web1
 
 Cambiare IP
 
@@ -43,3 +43,16 @@ Aggiungere disco per document root apache
 	setfacl -m g: DevADGroupName:rwx html
 	setfacl -m d:g:AdminADGroupName:rw html
 	setfacl -m d:g: DevADGroupName:rw html
+	
+	
+###ES: pro-be-db1
+
+	yum install mariadb-server
+	systemctl enable mariadb
+	systemctl start mariadb
+	mysql_secure_installation
+	
+	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+	echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+	
+	firewall-cmd --add-service=mysql --permanent
