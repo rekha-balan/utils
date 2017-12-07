@@ -39,10 +39,10 @@ Aggiungere disco per document root apache
 	
 	systemctl restart httpd
 
-	setfacl -m g:AdminADGroupName:rwx html
-	setfacl -m g: DevADGroupName:rwx html
-	setfacl -m d:g:AdminADGroupName:rw html
-	setfacl -m d:g: DevADGroupName:rw html
+	setfacl -m "g:AdminADGroupName:rwx" html
+	setfacl -m "g:DevADGroupName:rwx" html
+	setfacl -m "d:g:AdminADGroupName:rw" html
+	setfacl -m "d:g:DevADGroupName:rw" html
 	
 	
 ### ES: pro-be-db1
