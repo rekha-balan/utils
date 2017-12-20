@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- /etc/firewalld/services/zabbix.xml
+https://support.zabbix.com/browse/ZBXNEXT-3585
+-->
+<service>
+  <short>Zabbix</short>
+  <description>Allow service for Zabbix agent</description>
+  <port protocol="tcp" port="10050"/>
+</service>
