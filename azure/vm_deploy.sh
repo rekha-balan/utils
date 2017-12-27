@@ -86,3 +86,10 @@ az vm extension set \
   --publisher Microsoft.EnterpriseCloud.Monitoring \
   --protected-settings '{"workspaceKey": "'"$omskey"'"}' \
   --settings '{"workspaceId": "'"$omsid"'"}'
+ 
+# Install and configure the Dependency agent
+  az vm extension set \
+  --resource-group $myResourceGroup \
+  --vm-name $myVM \
+  --name DependencyAgentLinux \
+  --publisher Microsoft.Azure.Monitoring.DependencyAgent
