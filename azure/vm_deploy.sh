@@ -1,5 +1,7 @@
 #!/bin/bash
-# Variables
+set -ex
+
+# Settings  
 
 # Resource Group
 myResourceGroup=<Replace with your Resource Group>
@@ -16,6 +18,9 @@ myPublicIP=<Replace with your PIP name>
 
 # Network security group
 myNetworkSecurityGroup=<Replace with your NSG name>
+
+# Availability set
+myAvailabilitySet=<Replace with your AvailabilitySet name>
 
 # Network interface
 myNic=<Replace with your NIC name>
@@ -42,34 +47,50 @@ omskey=<Replace with your OMS key>
 # Create a resource group.
 az group create --name $myResourceGroup --location westeurope
 
-# Create a virtual network.
-az network vnet create --resource-group $myResourceGroup --name $myVnet --subnet-name $mySubnet
-
-# Create a public IP address.
-az network public-ip create --resource-group $myResourceGroup --name $myPublicIP
-
-# Create a network security group.
-az network nsg create --resource-group $myResourceGroup --name $myNetworkSecurityGroup
-
-# Create a virtual network card and associate with public IP address and NSG.
-az network nic create \
-  --resource-group $myResourceGroup \
-  --name $myNic \
-  --vnet-name $myVnet \
-  --subnet $mySubnet \
-  --network-security-group $myNetworkSecurityGroup \
-  --public-ip-address $myPublicIP
-
-# Create a new virtual machine, this creates SSH keys if not present.
-az vm create --resource-group $myResourceGroup --name $myVM --nics $myNic --image CentOS --admin-username algrega --size Standard_B1ms
-
-# Open port 22 to allow SSh traffic to host.
-az vm open-port --port 22 --resource-group $myResourceGroup --name $myVM
-
 # Create a Recovery Services vault
 az backup vault create --resource-group $myResourceGroup \
     --name $myRecoveryServicesVault \
     --location westeurope
+
+# Create a virtual network.
+az network vnet create --resource-group $myResourceGroup \
+    --name $myVnet \
+    --subnet-name $mySubnet
+
+# Create a public IP address.
+az network public-ip create --resource-group $myResourceGroup \
+    --name $myPublicIP
+
+# Create a network security group.
+az network nsg create --resource-group $myResourceGroup \
+    --name $myNetworkSecurityGroup
+
+# Create a virtual network card and associate with public IP address and NSG.
+az network nic create \
+     --resource-group $myResourceGroup \
+     --name $myNic \
+     --vnet-name $myVnet \
+     --subnet $mySubnet \
+     --network-security-group $myNetworkSecurityGroup \
+     --public-ip-address $myPublicIP
+  
+az vm availability-set create \
+    --resource-group myResourceGroup \
+    --name $myAvailabilitySet
+
+# Create a new virtual machine, this creates SSH keys if not present.
+az vm create --resource-group $myResourceGroup \
+    --name $myVM \
+    --nics $myNic \
+    --image CentOS \
+    --availability-set myAvailabilitySet \
+    --admin-username algrega \
+    --size Standard_B1ms
+
+# Open port 22 to allow SSh traffic to host.
+az vm open-port --resource-group $myResourceGroup \
+    --port 22 \
+    --name $myVM
 
 # Enable backup for Azure VM
 az backup protection enable-for-vm \
@@ -80,16 +101,16 @@ az backup protection enable-for-vm \
     
 # Install and configure the OMS agent.
 az vm extension set \
-  --resource-group $myResourceGroup \
-  --vm-name $myVM \
-  --name OmsAgentForLinux \
-  --publisher Microsoft.EnterpriseCloud.Monitoring \
-  --protected-settings '{"workspaceKey": "'"$omskey"'"}' \
-  --settings '{"workspaceId": "'"$omsid"'"}'
+    --resource-group $myResourceGroup \
+    --vm-name $myVM \
+    --name OmsAgentForLinux \
+    --publisher Microsoft.EnterpriseCloud.Monitoring \
+    --protected-settings '{"workspaceKey": "'"$omskey"'"}' \
+    --settings '{"workspaceId": "'"$omsid"'"}'
  
 # Install and configure the Dependency agent
-  az vm extension set \
-  --resource-group $myResourceGroup \
-  --vm-name $myVM \
-  --name DependencyAgentLinux \
-  --publisher Microsoft.Azure.Monitoring.DependencyAgent
+az vm extension set \
+    --resource-group $myResourceGroup \
+    --vm-name $myVM \
+    --name DependencyAgentLinux \
+    --publisher Microsoft.Azure.Monitoring.DependencyAgent
