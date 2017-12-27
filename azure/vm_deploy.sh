@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Variables
+# OMS Id and OMS key.
+omsid=<Replace with your OMS Id>
+omskey=<Replace with your OMS key>
+
+
 # Create a resource group.
 az group create --name TEST-RG --location westeurope
 
@@ -38,3 +44,12 @@ az backup protection enable-for-vm \
     --vault-name myRecoveryServicesVault \
     --vm myVM \
     --policy-name DefaultPolicy
+    
+# Install and configure the OMS agent.
+az vm extension set \
+  --resource-group myResourceGroup \
+  --vm-name myVM \
+  --name OmsAgentForLinux \
+  --publisher Microsoft.EnterpriseCloud.Monitoring \
+  --version 1.0 --protected-settings '{"workspaceKey": "'"$omskey"'"}' \
+  --settings '{"workspaceId": "'"$omsid"'"}'
