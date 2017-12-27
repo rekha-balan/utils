@@ -51,5 +51,5 @@ az vm extension set \
   --vm-name myVM \
   --name OmsAgentForLinux \
   --publisher Microsoft.EnterpriseCloud.Monitoring \
-  --version 1.0 --protected-settings '{"workspaceKey": "'"$omskey"'"}' \
+  --protected-settings '{"workspaceKey": "'"$omskey"'"}' \
   --settings '{"workspaceId": "'"$omsid"'"}'
