@@ -1,1 +1,0 @@
-az webapp deployment list-publishing-profiles -n 18001-prod-web1 -g 18001-prod-rg --query '[].{username:userName,pwd:userPWD,host:publishUrl,url:destinationAppUrl} | [1]' -o table
