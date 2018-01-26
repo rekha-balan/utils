@@ -1,0 +1,61 @@
+LIBRERIA DUMMY
+da usare quando la libreria non è più disponibile per eliminare i backup obsoleti
+
+ALLOCATE CHANNEL FOR MAINTENANCE DEVICE TYPE sbt PARMS 'SBT_LIBRARY=oracle.disksbt,ENV=(BACKUP_DIR=/tmp)';
+
+
+
+DATAPROTECTOR
+
+run {
+allocate channel 'dev_0' type 'sbt_tape' parms 
+ 'SBT_LIBRARY=/opt/omni/lib/libob2oracle8_64bit.so,ENV=(OB2BARTYPE=Oracle8,OB2APPNAME=cdb1,OB2BARLIST=rman_cdb1_full)';
+allocate channel 'dev_1' type 'sbt_tape' parms
+ 'SBT_LIBRARY=/opt/omni/lib/libob2oracle8_64bit.so,ENV=(OB2BARTYPE=Oracle8,OB2APPNAME=cdb1,OB2BARLIST=rman_cdb1_full)';
+allocate channel 'dev_2' type 'sbt_tape' parms
+'SBT_LIBRARY=/opt/omni/lib/libob2oracle8_64bit.so,ENV=(OB2BARTYPE=Oracle8,OB2APPNAME=cdb1,OB2BARLIST=rman_cdb1_full)';
+allocate channel 'dev_3' type 'sbt_tape' parms
+'SBT_LIBRARY=/opt/omni/lib/libob2oracle8_64bit.so,ENV=(OB2BARTYPE=Oracle8,OB2APPNAME=cdb1,OB2BARLIST=rman_cdb1_full)';
+allocate channel 'dev_4' type 'sbt_tape' parms
+'SBT_LIBRARY=/opt/omni/lib/libob2oracle8_64bit.so,ENV=(OB2BARTYPE=Oracle8,OB2APPNAME=cdb1,OB2BARLIST=rman_cdb1_full)';
+report obsolete;
+delete force noprompt obsolete;
+}
+
+
+LEGATO
+
+
+run {
+set command id to 'ARC_STAMPA';
+change archivelog all validate;
+allocate channel t1 type 'SBT_TAPE'
+parms 'ENV=(NSR_SERVER=bckced01,NSR_CLIENT=oraced01,NSR_DATA_VOLUME_POOL=Pool degli ARCHIVE)';
+sql 'alter system archive log current';
+backup
+  (
+   archivelog all
+   delete input
+   );
+
+release channel t1;
+host '/oracle/app/oracle/admin/dba/adhoc/bckcontrolfile.sh';
+}
+
+
+run {
+set command id to 'NSR_STAMPA';
+allocate channel t1 type 'SBT_TAPE'
+parms 'ENV=(NSR_SERVER=bckced01,NSR_CLIENT=oraced01,NSR_DATA_VOLUME_POOL=Pool dei DB)';
+allocate channel t2 type 'SBT_TAPE'
+parms 'ENV=(NSR_SERVER=bckced01,NSR_CLIENT=oraced01,NSR_DATA_VOLUME_POOL=Pool dei DB)';
+backup
+     filesperset 1
+     format 'db.%n.%s.%p.%u'
+      (
+      database
+      include current controlfile
+      );
+release channel t1;
+release channel t2;
+}

@@ -1,0 +1,24 @@
+RUN {
+ALLOCATE CHANNEL CH1 DEVICE TYPE DISK FORMAT '/backup/rman/%d/backup_%U';
+sql 'alter system checkpoint';
+sql 'alter system archive log current';
+backup incremental level 1 format '/backup/rman/%d/%d_DB-FILE_%s_%t' database;
+backup incremental level 1 format '/backup/rman/%d/%d_ARCH_%s_%t' archivelog all skip inaccessible delete input;
+backup incremental level 1 format '/backup/rman/%d/%d_CFILE_%s_%t' current controlfile ;
+backup incremental level 1 format '/backup/rman/%d/%d_SPFILE_%s_%t' spfile ;
+RELEASE CHANNEL CH1;
+}
+ALLOCATE CHANNEL FOR MAINTENANCE DEVICE TYPE DISK;
+CONFIGURE RETENTION POLICY TO RECOVERY WINDOW OF 7 DAYS;
+CONFIGURE BACKUP OPTIMIZATION ON;
+CROSSCHECK archivelog all;
+CROSSCHECK backup of database;
+CROSSCHECK backup of controlfile;
+CROSSCHECK copy of database;
+DELETE force noprompt expired backup of database;
+DELETE force noprompt expired backup of archivelog all;
+DELETE force noprompt expired backup of spfile;
+DELETE force noprompt expired backup of controlfile;
+REPORT obsolete;
+DELETE force noprompt obsolete;
+RELEASE CHANNEL;

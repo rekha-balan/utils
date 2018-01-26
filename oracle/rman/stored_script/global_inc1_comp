@@ -1,0 +1,24 @@
+RUN {
+CONFIGURE DEVICE TYPE DISK PARALLELISM 4 BACKUP TYPE TO BACKUPSET;
+sql 'alter system checkpoint';
+sql 'alter system archive log current';
+backup incremental level 1 AS COMPRESSED BACKUPSET format '/backup/rman/%d/%d_DB-FILE_%s_%t' database;
+backup incremental level 1 AS COMPRESSED BACKUPSET format '/backup/rman/%d/%d_ARCH_%s_%t' archivelog all skip inaccessible delete input;
+backup incremental level 1 AS COMPRESSED BACKUPSET format '/backup/rman/%d/%d_CFILE_%s_%t' current controlfile ;
+backup incremental level 1 AS COMPRESSED BACKUPSET format '/backup/rman/%d/%d_SPFILE_%s_%t' spfile ;
+}
+ALLOCATE CHANNEL FOR MAINTENANCE DEVICE TYPE DISK;
+CONFIGURE DEVICE TYPE DISK PARALLELISM 4 BACKUP TYPE TO BACKUPSET;
+CONFIGURE RETENTION POLICY TO RECOVERY WINDOW OF 7 DAYS;
+CONFIGURE BACKUP OPTIMIZATION ON;
+CROSSCHECK archivelog all;
+CROSSCHECK backup of database;
+CROSSCHECK backup of controlfile;
+CROSSCHECK copy of database;
+DELETE force noprompt expired backup of database;
+DELETE force noprompt expired backup of archivelog all;
+DELETE force noprompt expired backup of spfile;
+DELETE force noprompt expired backup of controlfile;
+REPORT obsolete;
+DELETE force noprompt obsolete;
+RELEASE CHANNEL;

@@ -1,0 +1,1 @@
+rman target / catalog rman/rman@rman cmdfile rman_full log rman_full.log

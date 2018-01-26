@@ -1,0 +1,11 @@
+RUN {
+ALLOCATE CHANNEL CH1 DEVICE TYPE DISK FORMAT '/backup/rman/%d/backup_%U';
+CONFIGURE BACKUP OPTIMIZATION ON;
+sql 'alter system checkpoint';
+sql 'alter system archive log current';
+backup format '/backup/rman/%d/%d_ARCH_%s_%t' archivelog all skip inaccessible delete input;
+backup format '/backup/rman/%d/%d_CFILE_%s_%t' current controlfile filesperset 1;
+backup format '/backup/rman/%d/%d_SPFILE_%s_%t' spfile filesperset 1;
+RELEASE CHANNEL CH1;
+}
+
