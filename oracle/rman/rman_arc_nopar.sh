@@ -16,8 +16,8 @@ do
 	grep ERROR /backup/logs/$ORACLE_SID/$ORACLE_SID.ARC.$DATE.log
 		if [ "$?" -eq "0" ]
 		then
-			cat /backup/logs/$ORACLE_SID/$ORACLE_SID.ARC.$DATE.log | mail -s "ARCHIVELOGS BACKUP ERROR - $HOSTNAME - DB: $ORACLE_SID" alessandro.greganti@unito.it
+			cat /backup/logs/$ORACLE_SID/$ORACLE_SID.ARC.$DATE.log | mail -s "ARCHIVELOGS BACKUP ERROR - $HOSTNAME - DB: $ORACLE_SID" MAIL_ADDRESS
 		else
-			cat /backup/logs/$ORACLE_SID/$ORACLE_SID.ARC.$DATE.log | mail -s "ARCHIVELOGS BACKUP SUCCEDED - $HOSTNAME - DB: $ORACLE_SID" alessandro.greganti@unito.it
+			cat /backup/logs/$ORACLE_SID/$ORACLE_SID.ARC.$DATE.log | mail -s "ARCHIVELOGS BACKUP SUCCEDED - $HOSTNAME - DB: $ORACLE_SID" MAIL_ADDRESS
 		fi
 done

@@ -16,8 +16,8 @@ do
 	grep ERROR /backup/logs/$ORACLE_SID/$ORACLE_SID.INC1.$DATE.log
 		if [ "$?" -eq "0" ]
 		then
-			cat /backup/logs/$ORACLE_SID/$ORACLE_SID.INC1.$DATE.log | mail -s "INCREMENTAL BACKUP ERROR - $HOSTNAME - DB: $ORACLE_SID" alessandro.greganti@unito.it
+			cat /backup/logs/$ORACLE_SID/$ORACLE_SID.INC1.$DATE.log | mail -s "INCREMENTAL BACKUP ERROR - $HOSTNAME - DB: $ORACLE_SID" MAIL_ADDRESS
 		else
-			cat /backup/logs/$ORACLE_SID/$ORACLE_SID.INC1.$DATE.log | mail -s "INCREMENTAL BACKUP SUCCEDED - $HOSTNAME - DB: $ORACLE_SID" alessandro.greganti@unito.it
+			cat /backup/logs/$ORACLE_SID/$ORACLE_SID.INC1.$DATE.log | mail -s "INCREMENTAL BACKUP SUCCEDED - $HOSTNAME - DB: $ORACLE_SID" MAIL_ADDRESS
 		fi
 done
