@@ -1,6 +1,7 @@
 ### General OpenSSL Commands
 
 These commands allow you to generate CSRs, Certificates, Private Keys and do other miscellaneous tasks.
+[Source SSL Shopper site](https://www.sslshopper.com/article-most-common-openssl-commands.html)
 
 - Generate a new private key and Certificate Signing Request
 	
