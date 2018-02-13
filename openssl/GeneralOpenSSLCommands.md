@@ -27,7 +27,7 @@ These commands allow you to generate CSRs, Certificates, Private Keys and do oth
 
 ### Checking Using OpenSSL
 
-If you need to check the information within a Certificate, CSR or Private Key, use these commands. You can also check CSRs and check certificates using our online tools.
+If you need to check the information within a Certificate, CSR or Private Key, use these commands.
 
 - Check a Certificate Signing Request (CSR)
 
