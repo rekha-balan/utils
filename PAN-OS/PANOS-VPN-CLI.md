@@ -1,6 +1,3 @@
-#PAN-OS
-
-
 ###CLI Commands to Status, Clear, Restore and Monitor an IPSEC VPN Tunnel
 
 The CLI commands in this document can be used to verify the status of an IPSEC tunnel, validate tunnel monitoring, clear the tunnel and restore the tunnel.
